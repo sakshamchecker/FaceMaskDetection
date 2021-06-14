@@ -13,10 +13,10 @@ video_camera = cv2.VideoCapture(0)
 
 while True:
     ret, frame = video_camera.read()
-    grayfaces = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    face = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     faces = faceCascade.detectMultiScale(
-        grayfaces,
+        face,
         scaleFactor=1.5,
         minNeighbors=5,
         minSize=(40, 40),
@@ -26,18 +26,18 @@ while True:
 
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 225), 2)
-        roi_gray=grayfaces[y:y+w,x:x+h]
-        roi_gray=cv2.resize(roi_gray,(82,82))  
-        img_pixels = image.img_to_array(roi_gray)  
+        roi=face[y:y+w,x:x+h]
+        roi=cv2.resize(roi_gray,(82,82))  
+        img_pixels = image.img_to_array(roi)  
         img_pixels = np.expand_dims(img_pixels, axis = 0)  
         img_pixels /= 255  
   
         predictions = model.predict(img_pixels)  
         print(predictions)
-        if predictions[0][0]>0.40:
-        	max_index=0
+        if predictions[0][0]>0.50:
+            max_index=0
         else:
-        	max_index=1
+            max_index=1
         labels=['WithoutMask','WithMask']
         predicted_label=labels[max_index]
         cv2.putText(frame, predicted_label, (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
@@ -48,6 +48,3 @@ while True:
 # release function
 cv2. video_capture.release()
 cv2.destroyAllWindows()
-
-
-

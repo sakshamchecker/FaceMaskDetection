@@ -4,9 +4,9 @@ import cv2
 import sys  
 from keras.preprocessing import image  
 import keras
-
+import visualkeras
 model=keras.models.load_model("Model/model.h5")
-
+visualkeras.layered_view(model)
 faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')  
 
 video_camera = cv2.VideoCapture(0)
